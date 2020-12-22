@@ -1,0 +1,10 @@
+D:\Courses\Async\AsyncSolution\AsyncCallConsole\bin\Debug\AsyncCallConsole.exe.config
+D:\Courses\Async\AsyncSolution\AsyncCallConsole\bin\Debug\AsyncCallConsole.exe
+D:\Courses\Async\AsyncSolution\AsyncCallConsole\bin\Debug\AsyncCallConsole.pdb
+D:\Courses\Async\AsyncSolution\AsyncCallConsole\obj\Debug\AsyncCallConsole.csproj.CoreCompileInputs.cache
+D:\Courses\Async\AsyncSolution\AsyncCallConsole\obj\Debug\AsyncCallConsole.exe
+D:\Courses\Async\AsyncSolution\AsyncCallConsole\obj\Debug\AsyncCallConsole.pdb
+D:\Courses\Async\AsyncSolution\AsyncCallConsole\bin\Debug\NLog.dll
+D:\Courses\Async\AsyncSolution\AsyncCallConsole\bin\Debug\NLog.xml
+D:\Courses\Async\AsyncSolution\AsyncCallConsole\obj\Debug\AsyncCallConsole.csproj.CopyComplete
+D:\Courses\Async\AsyncSolution\AsyncCallConsole\obj\Debug\AsyncCallConsole.csprojAssemblyReference.cache

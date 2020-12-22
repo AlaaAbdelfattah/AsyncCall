@@ -1,0 +1,104 @@
+1: Read From Database.
+
+{
+    "BorderNumber": 0,
+    "SponsorInformation": {
+        "SponsorIdNo": 1020438683,	
+        "SponsorDate": "1401/07/01"
+    }
+}
+
+============================================================================
+2: No Data In NIC.
+
+{
+    "BorderNumber": 0,
+    "SponsorInformation": {
+        "SponsorIdNo": 1071913790,
+        "SponsorDate": "1411/11/13"
+    }
+}
+
+{
+    "BorderNumber": 0,
+    "SponsorInformation": {
+        "SponsorIdNo": 1059224939,
+        "SponsorDate": "1409/08/20"
+    }
+}
+
+============================================================================
+3: Valid Laboers returned from NIC but no anyone have Musand contract.
+
+{
+    "BorderNumber": 0,
+    "SponsorInformation": {
+        "SponsorIdNo": 1001643194,
+        "SponsorDate": "1383/07/01"
+    }
+}
+
+
+{
+    "BorderNumber": 0,
+    "SponsorInformation": {
+        "SponsorIdNo": 1005450240,
+        "SponsorDate": "1382/07/01"
+    }
+}
+
+============================================================================
+4: Valid Laboers returned from NIC and some NIC laboers have Musand contract.
+
+{
+    "BorderNumber": 0,
+    "SponsorInformation": {
+        "SponsorIdNo": 1020438683,
+        "SponsorDate": "1401/07/01"
+    }
+}
+
+{
+    "BorderNumber": 0,
+    "SponsorInformation": {
+        "SponsorIdNo": 1011029350,
+        "SponsorDate": "1404/05/11"
+    }
+}
+
+{
+    "BorderNumber": 0,
+    "SponsorInformation": {
+        "SponsorIdNo": 1101591491,
+        "SponsorDate": "1405/02/12"
+    }
+}
+
+
+============================================================================
+5: Valid Laboers returned from NIC and all NIC laboers have Musand contract.
+
+============================================================================
+6. Exception Path 
+
+{
+    "BorderNumber": 0,
+    "SponsorInformation": {
+        "SponsorIdNo": 1071913790,
+        "SponsorDate": "141111-13"
+    }
+}
+
+============================================================================
+
+Call Service 1  NIC => 500MS
+
+
+return Content(HttpStatusCode.InternalServerError,
+                                    new
+                                    {
+                                        ResponseCode = 500,
+                                        ResponseMessage = "عفوا، يتعذر استرجاع بيانات العماله في الوقت الحالي ارجو المحاوله في وقت لاحقا"
+                                    });
+									
+									
