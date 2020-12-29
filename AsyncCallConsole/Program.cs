@@ -3,23 +3,30 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace AsyncCallConsole
 {
-    class Program
+    public class Program
     {
+
         #region Fields and Properties
 
-
-        static bool IsExceptionPath = bool.Parse(ConfigurationManager.AppSettings["IsExceptionPath"]);
-        static bool IsThread = bool.Parse(ConfigurationManager.AppSettings["IsThread"]);
-        static bool IsSequential = bool.Parse(ConfigurationManager.AppSettings["IsSequential"]);
-        static bool IsTask = bool.Parse(ConfigurationManager.AppSettings["IsTask"]);
-        static bool IsAsyncTask = bool.Parse(ConfigurationManager.AppSettings["IsAsyncTask"]);
+        static readonly bool IsExceptionPath = bool.Parse(ConfigurationManager.AppSettings["IsExceptionPath"]);
+        static readonly bool IsThread = bool.Parse(ConfigurationManager.AppSettings["IsThread"]);
+        static readonly bool IsSequential = bool.Parse(ConfigurationManager.AppSettings["IsSequential"]);
+        static readonly bool IsTask = bool.Parse(ConfigurationManager.AppSettings["IsTask"]);
+        static readonly bool IsAsyncTask = bool.Parse(ConfigurationManager.AppSettings["IsAsyncTask"]);
+        //Parallel Invoke 
+        static readonly bool IsParallel_Invoke_Void = bool.Parse(ConfigurationManager.AppSettings["IsParallel_Invoke_Void"]);
+        static readonly bool IsParallel_Invoke_ReturnValue = bool.Parse(ConfigurationManager.AppSettings["IsParallel_Invoke_ReturnValue"]);
+        //Parallel For 
+        static readonly bool IsParallel_For_Void = bool.Parse(ConfigurationManager.AppSettings["IsParallel_For_Void"]);
+        static readonly bool IsParallel_For_ReturnValue = bool.Parse(ConfigurationManager.AppSettings["IsParallel_For_ReturnValue"]);
+        //Parallel Foreach 
+        static readonly bool IsParallel_Foreach_Void = bool.Parse(ConfigurationManager.AppSettings["IsParallel_Foreach_Void"]);
+        static readonly bool IsParallel_Foreach_ReturnValue = bool.Parse(ConfigurationManager.AppSettings["IsParallel_Foreach_ReturnValue"]);
 
         #endregion
 
@@ -29,12 +36,10 @@ namespace AsyncCallConsole
         {
             try
             {
-                #region IsSequential 
+                #region Sequential 
 
                 if (IsSequential)
                 {
-                    //Average Response Time : 11005
-                    //Average Response Time : 11018
                     Console.WriteLine("Hello World! - Test Sequential Cases");
                     Stopwatch stopwatch = Stopwatch.StartNew();
                     SequentialDelayApp(10);
@@ -55,7 +60,7 @@ namespace AsyncCallConsole
 
                 #endregion
 
-                #region IsThread
+                #region Thread
 
                 if (IsThread)
                 {
@@ -135,7 +140,7 @@ namespace AsyncCallConsole
 
                 #endregion
 
-                #region IsTask
+                #region Task
 
                 if (IsTask)
                 {
@@ -169,35 +174,38 @@ namespace AsyncCallConsole
 
                 #endregion
 
-                #region IsAsyncTask
+                #region Async
 
                 if (IsAsyncTask)
                 {
                     //Clean Logs Files 
                     Console.WriteLine("Hello World! - Test Async Cases" + DateTime.Now);
-                    File.WriteAllText("D:\\Courses\\Async\\AsyncSolution\\AsyncCallConsole\\Logs\\AsyncTaskApp1.txt", "");
-                    File.WriteAllText("D:\\Courses\\Async\\AsyncSolution\\AsyncCallConsole\\Logs\\AsyncTaskApp2.txt", "");
-                    //Async Task 1
-                    Stopwatch stopwatch1 = Stopwatch.StartNew();
-                    File.AppendAllText("D:\\Courses\\Async\\AsyncSolution\\AsyncCallConsole\\Logs\\AsyncTaskApp1.txt", " ,asyncTask1 started at: " + DateTime.Now + Environment.NewLine);
-                    Task asyncTask1 = new Task(delegate () { Mytask1("D:\\Courses\\Async\\AsyncSolution\\AsyncCallConsole\\Logs\\AsyncTask.txt"); });
-                    asyncTask1.Start();
-                    stopwatch1.Stop();
-                    File.AppendAllText("D:\\Courses\\Async\\AsyncSolution\\AsyncCallConsole\\Logs\\AsyncTaskApp1.txt", " ,asyncTask1 ended at: " + DateTime.Now + Environment.NewLine);
-                    File.AppendAllText("D:\\Courses\\Async\\AsyncSolution\\AsyncCallConsole\\Logs\\AsyncTaskApp1.txt", " ,asyncTask1 response time: " + stopwatch1.ElapsedMilliseconds + Environment.NewLine);
-                    //Async Task 2 
-                    Stopwatch stopwatch2 = Stopwatch.StartNew();
-                    File.AppendAllText("D:\\Courses\\Async\\AsyncSolution\\AsyncCallConsole\\Logs\\AsyncTaskApp2.txt", " ,asyncTask2 started at: " + DateTime.Now + Environment.NewLine);
-                    Task asyncTask2 = new Task(delegate () { Mytask2("D:\\Courses\\Async\\AsyncSolution\\AsyncCallConsole\\Logs\\AsyncTask.txt"); });
-                    asyncTask2.Start();
-                    stopwatch2.Stop();
-                    File.AppendAllText("D:\\Courses\\Async\\AsyncSolution\\AsyncCallConsole\\Logs\\AsyncTaskApp2.txt", " ,asyncTask2 ended at: " + DateTime.Now + Environment.NewLine);
-                    File.AppendAllText("D:\\Courses\\Async\\AsyncSolution\\AsyncCallConsole\\Logs\\AsyncTaskApp2.txt", " ,asyncTask2 response time: " + stopwatch2.ElapsedMilliseconds + Environment.NewLine);
+                    //File.WriteAllText("D:\\Courses\\Async\\AsyncSolution\\AsyncCallConsole\\Logs\\AsyncTaskApp1.txt", "");
+                    //File.WriteAllText("D:\\Courses\\Async\\AsyncSolution\\AsyncCallConsole\\Logs\\AsyncTaskApp2.txt", "");
+                    ////Async Task 1
+                    //Stopwatch stopwatch1 = Stopwatch.StartNew();
+                    //File.AppendAllText("D:\\Courses\\Async\\AsyncSolution\\AsyncCallConsole\\Logs\\AsyncTaskApp1.txt", " ,asyncTask1 started at: " + DateTime.Now + Environment.NewLine);
+                    //Task asyncTask1 = new Task(delegate () { Mytask1("D:\\Courses\\Async\\AsyncSolution\\AsyncCallConsole\\Logs\\AsyncTask.txt"); });
+                    //asyncTask1.Start();
+                    //stopwatch1.Stop();
+                    //File.AppendAllText("D:\\Courses\\Async\\AsyncSolution\\AsyncCallConsole\\Logs\\AsyncTaskApp1.txt", " ,asyncTask1 ended at: " + DateTime.Now + Environment.NewLine);
+                    //File.AppendAllText("D:\\Courses\\Async\\AsyncSolution\\AsyncCallConsole\\Logs\\AsyncTaskApp1.txt", " ,asyncTask1 response time: " + stopwatch1.ElapsedMilliseconds + Environment.NewLine);
+                    ////Async Task 2 
+                    //Stopwatch stopwatch2 = Stopwatch.StartNew();
+                    //File.AppendAllText("D:\\Courses\\Async\\AsyncSolution\\AsyncCallConsole\\Logs\\AsyncTaskApp2.txt", " ,asyncTask2 started at: " + DateTime.Now + Environment.NewLine);
+                    //Task asyncTask2 = new Task(delegate () { Mytask2("D:\\Courses\\Async\\AsyncSolution\\AsyncCallConsole\\Logs\\AsyncTask.txt"); });
+                    //asyncTask2.Start();
+                    //stopwatch2.Stop();
+                    //File.AppendAllText("D:\\Courses\\Async\\AsyncSolution\\AsyncCallConsole\\Logs\\AsyncTaskApp2.txt", " ,asyncTask2 ended at: " + DateTime.Now + Environment.NewLine);
+                    //File.AppendAllText("D:\\Courses\\Async\\AsyncSolution\\AsyncCallConsole\\Logs\\AsyncTaskApp2.txt", " ,asyncTask2 response time: " + stopwatch2.ElapsedMilliseconds + Environment.NewLine);
                     //Main Scenario 
+
+                    Task asyncTask2 = new Task(delegate () { CallAsyncMethodAsAforeachForOneAsyncMethod("D:\\Courses\\Async\\AsyncSolution\\AsyncCallConsole\\Logs\\AsyncTask.txt"); });
+                    asyncTask2.Start();
                     Console.WriteLine("---------------------------------------------------");
                     Console.WriteLine("Main senario Started At: " + DateTime.Now);
                     Stopwatch stopwatch3 = Stopwatch.StartNew();
-                    for (int i = 0; i < 400; i++)
+                    for (int i = 0; i < 500; i++)
                     {
                         Console.WriteLine("Index Of Async Main Senario: " + i);
                     }
@@ -210,6 +218,178 @@ namespace AsyncCallConsole
 
                 #endregion
 
+                #region Parallel
+
+                #region Invoke
+
+                if (IsParallel_Invoke_Void)
+                {
+                    Console.WriteLine("----------------IsParallel_Invoke-----------------------");
+                    Parallel.Invoke(
+                        () => { Parallel_1_Void(); },
+                        () => { Parallel_2_Void(); },
+                        () => { Parallel_3_Void(); }
+                        );
+                }
+
+                if (IsParallel_Invoke_ReturnValue)
+                {
+                    Console.WriteLine("Invoke String Calls");
+                    List<string> resultStringsList = new List<string>();
+                    Parallel.Invoke(
+                        () => { resultStringsList.Add(Parallel_1_String()); },
+                        () => { resultStringsList.Add(Parallel_2_String()); },
+                        () => { resultStringsList.Add(Parallel_3_String()); }
+                        );
+                    Console.WriteLine("---------Print The Result of  Invoking the Parallel Calls--------");
+                    foreach (var item in resultStringsList)
+                    {
+                        Console.WriteLine(item);
+                    }
+                    Console.WriteLine("---------------------Parallel Main Senario----------------------");
+                    Console.WriteLine("Parallel Main Senario Started At: " + DateTime.Now);
+                    for (int i = 0; i < 5; i++)
+                    {
+                        Console.WriteLine("Parallel Main Senario  :" + i);
+                    }
+                    Console.WriteLine("Parallel Main Senario Ended At: " + DateTime.Now);
+                }
+
+                #endregion
+
+                #region For
+
+                if (IsParallel_For_Void)
+                {
+                    Console.WriteLine("----------------IsParallel_For_Void-----------------------");
+                    Parallel.For(1, 4, (Index) =>
+                    {
+                        if (Index == 1)
+                        {
+                            Parallel_1_Void();
+                        }
+                        else if (Index == 2)
+                        {
+                            Parallel_2_Void();
+                        }
+                        else if (Index == 3)
+                        {
+                            Parallel_3_Void();
+                        }
+                    });
+                    Console.WriteLine("---------------------Parallel Main Senario----------------------");
+                    Console.WriteLine("Parallel Main Senario Started At: " + DateTime.Now);
+                    for (int i = 0; i < 5; i++)
+                    {
+                        Console.WriteLine("Parallel Main Senario  :" + i);
+                    }
+                    Console.WriteLine("Parallel Main Senario Ended At: " + DateTime.Now);
+                }
+
+                if (IsParallel_For_ReturnValue)
+                {
+                    Console.WriteLine("----------------IsParallel_For_ReturnValue-----------------------");
+                    List<string> returnsStrings = new List<string>();
+                    Parallel.For(1, 4, (Index) =>
+                    {
+                        if (Index == 1)
+                        {
+                            returnsStrings.Add(Parallel_1_String());
+                        }
+                        else if (Index == 2)
+                        {
+                            returnsStrings.Add(Parallel_2_String());
+                        }
+                        else if (Index == 3)
+                        {
+                            returnsStrings.Add(Parallel_3_String());
+                        }
+                    });
+                    Console.WriteLine("---------Print The Result of  [For] the Parallel Calls--------");
+                    foreach (var item in returnsStrings)
+                    {
+                        Console.WriteLine(item);
+                    }
+                    Console.WriteLine("---------------------Parallel Main Senario----------------------");
+                    Console.WriteLine("Parallel Main Senario Started At: " + DateTime.Now);
+                    for (int i = 0; i < 5; i++)
+                    {
+                        Console.WriteLine("Parallel Main Senario  :" + i);
+                    }
+                    Console.WriteLine("Parallel Main Senario Ended At: " + DateTime.Now);
+
+                }
+
+                #endregion
+
+                #region Foreach
+
+                if (IsParallel_Foreach_Void)
+                {
+                    Console.WriteLine("----------------IsParallel_Foreach_Void-----------------------");
+                    List<int> countsList = new List<int>() { 1, 2, 3 };
+                    Parallel.ForEach(countsList, (item) =>
+                    {
+                        if (item == 1)
+                        {
+                            Parallel_1_Void();
+                        }
+                        else if (item == 2)
+                        {
+                            Parallel_2_Void();
+                        }
+                        else if (item == 3)
+                        {
+                            Parallel_3_Void();
+                        }
+                    });
+                    Console.WriteLine("---------------------Parallel Main Senario----------------------");
+                    Console.WriteLine("Parallel Main Senario Started At: " + DateTime.Now);
+                    for (int i = 0; i < 5; i++)
+                    {
+                        Console.WriteLine("Parallel Main Senario  :" + i);
+                    }
+                    Console.WriteLine("Parallel Main Senario Ended At: " + DateTime.Now);
+                }
+
+                if (IsParallel_Foreach_ReturnValue)
+                {
+                    Console.WriteLine("----------------IsParallel_Foreach_ReturnValue-----------------------");
+                    List<int> countsList = new List<int>() { 1, 2, 3 };
+                    List<string> returnStrings = new List<string>();
+                    Parallel.ForEach(countsList, (item) =>
+                    {
+                        if (item == 1)
+                        {
+                            returnStrings.Add(Parallel_1_String());
+                        }
+                        else if (item == 2)
+                        {
+                            returnStrings.Add(Parallel_2_String());
+                        }
+                        else if (item == 3)
+                        {
+                            returnStrings.Add(Parallel_3_String());
+                        }
+                    });
+                    Console.WriteLine("---------Print The Result of  [For] the Parallel Calls--------");
+                    foreach (var item in returnStrings)
+                    {
+                        Console.WriteLine(item);
+                    }
+                    Console.WriteLine("---------------------Parallel Main Senario----------------------");
+                    Console.WriteLine("Parallel Main Senario Started At: " + DateTime.Now);
+                    for (int i = 0; i < 5; i++)
+                    {
+                        Console.WriteLine("Parallel Main Senario  :" + i);
+                    }
+                    Console.WriteLine("Parallel Main Senario Ended At: " + DateTime.Now);
+                }
+
+                #endregion
+
+                #endregion
+
             }
             catch (Exception ex)
             {
@@ -219,22 +399,174 @@ namespace AsyncCallConsole
 
         #endregion
 
-        #region IsAsyncTask
+        #region Parallel
+
+        #region Void
+
+        public static void Parallel_1_Void()
+        {
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            stopwatch.Start();
+            Console.WriteLine("Parallel_1_Void Invoked At: " + DateTime.Now);
+            Thread.Sleep(1000);
+            Console.WriteLine("Parallel_1_Void Started At: " + DateTime.Now);
+            for (int i = 0; i < 3; i++)
+            {
+                Console.WriteLine("Parallel_1 :" + i);
+            }
+            stopwatch.Stop();
+            Console.WriteLine("Parallel_1_Void Ended At: " + DateTime.Now + " Execution Time: " + stopwatch.ElapsedMilliseconds);
+        }
+
+        public static void Parallel_2_Void()
+        {
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            stopwatch.Start();
+            Console.WriteLine("Parallel_2_Void Invoked At: " + DateTime.Now);
+            Thread.Sleep(1000);
+            Console.WriteLine("Parallel_2_Void Started At: " + DateTime.Now);
+            for (int i = 0; i < 3; i++)
+            {
+                Console.WriteLine("Parallel_2_Void :" + i);
+            }
+            stopwatch.Stop();
+            Console.WriteLine("Parallel_2_Void Ended At: " + DateTime.Now + " Execution Time: " + stopwatch.ElapsedMilliseconds);
+        }
+
+        public static void Parallel_3_Void()
+        {
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            stopwatch.Start();
+            Console.WriteLine("Parallel_3_Void Invoked At: " + DateTime.Now);
+            Thread.Sleep(1000);
+            Console.WriteLine("Parallel_3_Void Started At: " + DateTime.Now);
+            for (int i = 0; i < 3; i++)
+            {
+                Console.WriteLine("Parallel_3_Void :" + i);
+            }
+            stopwatch.Stop();
+            Console.WriteLine("Parallel_3_Void Ended At: " + DateTime.Now + " Execution Time: " + stopwatch.ElapsedMilliseconds);
+        }
+
+        #endregion
+
+        #region Return String
+
+        public static string Parallel_1_String()
+        {
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            stopwatch.Start();
+            Console.WriteLine("Parallel_1_String Invoked At: " + DateTime.Now);
+            Thread.Sleep(1000);
+            Console.WriteLine("Parallel_1_String Started At: " + DateTime.Now);
+            for (int i = 0; i < 3; i++)
+            {
+                Console.WriteLine("Parallel_1_String :" + i);
+            }
+            Console.WriteLine("Parallel_1_String Ended At: " + DateTime.Now);
+            stopwatch.Stop();
+            return "Parallel_1_String Ended At: " + DateTime.Now + " Execution Time: " + stopwatch.ElapsedMilliseconds;
+        }
+
+        public static string Parallel_2_String()
+        {
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            stopwatch.Start();
+            Console.WriteLine("Parallel_2_String Invoked At: " + DateTime.Now);
+            Thread.Sleep(1000);
+            Console.WriteLine("Parallel_2_String Started At: " + DateTime.Now);
+            for (int i = 0; i < 3; i++)
+            {
+                Console.WriteLine("Parallel_2_String :" + i);
+            }
+            Console.WriteLine("Parallel_2_String Ended At: " + DateTime.Now);
+            stopwatch.Stop();
+            return "Parallel_2_String Ended At: " + DateTime.Now + " Execution Time: " + stopwatch.ElapsedMilliseconds;
+        }
+
+        public static string Parallel_3_String()
+        {
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            stopwatch.Start();
+            Console.WriteLine("Parallel_3_String Invoked At: " + DateTime.Now);
+            Thread.Sleep(1000);
+            Console.WriteLine("Parallel_3_String Started At: " + DateTime.Now);
+            for (int i = 0; i < 3; i++)
+            {
+                Console.WriteLine("Parallel_3_String :" + i);
+            }
+            Console.WriteLine("Parallel_3_String Ended At: " + DateTime.Now);
+            stopwatch.Stop();
+            return "Parallel_3_String Ended At: " + DateTime.Now + " Execution Time: " + stopwatch.ElapsedMilliseconds;
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Async
 
         static async void Mytask1(string filePath)
         {
+            Console.WriteLine("-------------------------Start Mytask1 Call----------------------");
+            Console.WriteLine();
+            Console.WriteLine("Mytask1 Stated  At:" + DateTime.Now);
             var counter1 = await ReadFromFile1(filePath);
-            Console.WriteLine("Mytask1 File Data Count:" + (counter1));
+            Console.WriteLine("Mytask1 File Data Count:" + (counter1) + " At:" + DateTime.Now);
+            Console.WriteLine("-------------------------End Mytask1 Call----------------------");
+            Console.WriteLine();
         }
 
         static async void Mytask2(string filePath)
         {
+            Console.WriteLine("-------------------------Start Mytask2 Call----------------------");
+            Console.WriteLine();
+            Console.WriteLine("Mytask2 Stated  At:" + DateTime.Now);
             var counter1 = await ReadFromFile2(filePath);
-            Console.WriteLine("Mytask2 File Data Count:" + (counter1));
+            Console.WriteLine("Mytask2 File Data Count:" + (counter1) + " At:" + DateTime.Now);
+            Console.WriteLine("-------------------------End Mytask2 Call----------------------");
+            Console.WriteLine();
+        }
+
+        static async void CallAsyncMethodTwice(string filePath)
+        {
+            Console.WriteLine("-----------------------------------------------");
+            Console.WriteLine("CallAsyncMethodTwice Started to call ReadFromFile1 At:" + DateTime.Now);
+            var counter1 = await ReadFromFile1(filePath);
+            //Console.WriteLine("allAsyncMethodTwice Started to call ReadFromFile1 Counter" + counter1);
+            Console.WriteLine("CallAsyncMethodTwice End Call ReadFromFile1 At:" + DateTime.Now);
+            Console.WriteLine("-----------------------------------------------");
+            Console.WriteLine("CallAsyncMethodTwice Started to call ReadFromFile2 At:" + DateTime.Now);
+            var counter2 = await ReadFromFile2(filePath);
+            //Console.WriteLine("allAsyncMethodTwice Started to call ReadFromFile2 Counter" + counter2);
+            Console.WriteLine("CallAsyncMethodTwice End Call ReadFromFile2 At:" + DateTime.Now);
+
+            for (int i = 0; i < 10; i++)
+            {
+                Console.WriteLine("Sum For The Two Counters At Index: " + i + "  " + (counter1 + counter2));
+            }
+        }
+
+        static async void CallAsyncMethodAsAforeachForOneAsyncMethod(string filePath)
+        {
+            Console.WriteLine("-----------------------------------------------");
+            int counter = 0;
+            for (int i = 0; i < 3; i++)
+            {
+                Console.WriteLine("CallAsyncMethodAsAforeachForOneAsyncMethod Started to call ReadFromFile1 At:" + DateTime.Now);
+                counter = await ReadFromFile1(filePath);
+                Console.WriteLine("CallAsyncMethodAsAforeachForOneAsyncMethod End Call ReadFromFile1 At:" + DateTime.Now);
+            }
+            Console.WriteLine("-----------------------------------------------");
+            for (int i = 0; i < 10; i++)
+            {
+                Console.WriteLine("Sum For The Two Counters At Index: " + i + "  " + (counter));
+            }
         }
 
         static async Task<int> ReadFromFile1(string filePath)
         {
+            Thread.Sleep(5000);
             int count = 0;
             using (StreamReader stream = new StreamReader(filePath))
             {
@@ -258,7 +590,7 @@ namespace AsyncCallConsole
 
         #endregion
 
-        #region IsSequential 
+        #region Sequential 
 
         static void SequentialDelayApp(int i)
         {
@@ -271,7 +603,7 @@ namespace AsyncCallConsole
 
         #endregion
 
-        #region IsThread
+        #region Thread
 
         static void ThreadDelayApp1(int i)
         {
@@ -360,7 +692,6 @@ namespace AsyncCallConsole
         }
 
         #endregion
-
 
     }
 }
